@@ -1,0 +1,21 @@
+{
+  "name": "common-algorithms-javascript",
+  "version": "0.0.0",
+  "description": "Common algorithms and data-structures",
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/patrickmclaren/common-algorithms"
+  },
+  "author": "Patrick McLaren",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/patrickmclaren/common-algorithms/issues"
+  },
+  "homepage": "https://github.com/patrickmclaren/common-algorithms",
+  "devDependencies": {
+    "jasmine": "~2.2.1"
+  }
+}
