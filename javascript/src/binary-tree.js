@@ -10,13 +10,12 @@ var BinaryNode = function (value) {
         var nodes = [];
         nodes.push(that.value);
 
-        if (that.left) {
-            nodes = nodes.concat(that.left.flatten());
-        }
-
-        if (that.right) {
-            nodes = nodes.concat(that.right.flatten());
-        }
+        var children = ['left', 'right'];
+        children.forEach(function (child) {
+            if (that[child]) {
+                nodes = nodes.concat(that[child].flatten());
+            }
+        });
 
         return nodes;
     };
