@@ -1,25 +1,33 @@
 var BinaryTree = require('./binary-tree');
 
-var NodeContext = function (tree, branch) {
-    this.tree   = tree;
+/**
+ * Store a branch with context to it's parent. By providing getters and
+ * setters, `NodeContext` allows both checking if a branch is present, and
+ * setting (inserting) a new branch, without reference being lost as `null`.
+ */
+var BranchContext = function (parent, branch) {
+    this.parent = parent;
     this.branch = branch;
 
-    this.getNode = function () {
-        return tree[branch];
+    this.getBranch = function () {
+        return parent[branch];
     };
 
-    this.setNode = function (node) {
-        tree[branch] = node;
+    this.setBranch = function (node) {
+        parent[branch] = node;
     };
 }
 
+/**
+ * Get immediate children of given nodes, as `BranchContext`.
+ */
 var getChildren = function (nodes) {
     var children = []; var branches = ['left', 'right'];
     for (var i = 0; i < nodes.length; i++) {
         var tree = nodes[i];
         if (tree) {
             branches.forEach(function (branch) {
-                children.push(new NodeContext(tree, branch));
+                children.push(new BranchContext(tree, branch));
             });
         }
     }
@@ -27,31 +35,40 @@ var getChildren = function (nodes) {
     return children;
 };
 
+/**
+ * A binary tree that is complete, i.e.
+ *   complete := full tree, except for perhaps rightmost sub-tree
+ * Provides `insert` method, which preserves the complete property.
+ */
 var CompleteBinaryTree = function (value) {
     BinaryTree.call(this, value);
 
     var that = this;
 
+    /**
+     * Insert a new node with value `key` into the tree, such that
+     * the complete property of the tree is preserved.
+     */
     this.insert = function (key, klass) {
         klass = typeof klass !== 'undefined' ? klass : CompleteBinaryTree;
 
-        var nodes = [that]; var children = []; var inserted = false;
+        var branches = [that]; var children = []; var inserted = false;
         while (!inserted) {
-            children = getChildren(nodes);
+            children = getChildren(branches);
 
             inserted = children.some(function (child) {
-                if (!child.getNode()) {
-                    child.setNode(new klass(key));
+                if (!child.getBranch()) {
+                    child.setBranch(new klass(key));
                     return true;
                 }
             });
 
             if (!inserted) {
-                nodes = [];
+                branches = [];
                 children.forEach(function (child) {
-                    var node = child.getNode();
-                    if (nodes.indexOf(node) < 0) {
-                        nodes.push(node);
+                    var branch = child.getBranch();
+                    if (branches.indexOf(branch) < 0) {
+                        branches.push(branch);
                     }
                 });
             }
