@@ -1,31 +1,39 @@
-var BinaryTree = require('./binary-tree');
+var CompleteBinaryTree = require('./complete-binary-tree');
 
 var BinaryHeap = function (value) {
-    BinaryTree.call(this, value);
+    CompleteBinaryTree.call(this, value);
 
-    this.insert = function (key) {
-        if (this.left) {
-            if (this.left.value < key) {
-                if (this.right) {
-                    if (this.right.value > key) {
-                        this.right.insert(key);
-                    } else {
-                        var tmp = this.right;
-                        this.right = new BinaryHeap(key);
-                        this.right.left = tmp;
-                    }
-                } else {
-                    this.right = new BinaryHeap(key);
+    var that = this;
+
+    this.heapify = function () {
+        var children = ['left', 'right'];
+        var swapped = children.forEach(function (child) {
+            if (that[child]) {
+                that[child].heapify();
+
+                if (that[child].value > that.value) {
+                    var tmp = that.value;
+
+                    that.value = that[child].value;
+                    that[child].value = tmp;
+
+                    return true;
                 }
-            } else {
-                this.left.insert(key);
             }
-        } else {
-            this.left = new BinaryHeap(key);
+        });
+
+        if (swapped) {
+            that.heapify();
         }
+    };
+
+    var _insert = this.insert;
+    this.insert = function (key) {
+        _insert.call(that, key, BinaryHeap);
+        that.heapify();
     };
 };
 
-BinaryHeap.prototype = Object.create(BinaryTree.prototype);
+BinaryHeap.prototype = Object.create(CompleteBinaryTree.prototype);
 
 module.exports = BinaryHeap;
