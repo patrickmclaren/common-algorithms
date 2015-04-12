@@ -48,6 +48,10 @@ var CompleteBinaryTree = function (value) {
     /**
      * Insert a new node with value `key` into the tree, such that
      * the complete property of the tree is preserved.
+     * Takes `klass` parameter for class of new node, i.e. new node
+     * will be instantiated as `new klass(key)`. Equivalently, `insert`
+     * is a type parametrized function, allowing typesafe use of `insert` by
+     * sub-classes of `CompleteBinaryTree`.
      */
     this.insert = function (key, klass) {
         klass = typeof klass !== 'undefined' ? klass : CompleteBinaryTree;
