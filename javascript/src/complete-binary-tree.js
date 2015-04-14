@@ -46,6 +46,29 @@ var CompleteBinaryTree = function (value) {
     var that = this;
 
     /**
+     * Apply `predicate` to the tree, breadth first. Returns as soon
+     * as any invocation of `predicate` returns true.
+     */
+    this.some = function (predicate) {
+        var branches = [that]; var children = []; var test = false;
+        while (!test) {
+            children = getChildren(branches);
+
+            test = children.some(predicate);
+
+            if (!test) {
+                branches = [];
+                children.forEach(function (child) {
+                    var branch = child.getBranch();
+                    if (branches.indexOf(branch) < 0) {
+                        branches.push(branch);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
      * Insert a new node with value `key` into the tree, such that
      * the complete property of the tree is preserved.
      * Takes `klass` parameter for class of new node, i.e. new node
@@ -56,27 +79,12 @@ var CompleteBinaryTree = function (value) {
     this.insert = function (key, klass) {
         klass = typeof klass !== 'undefined' ? klass : CompleteBinaryTree;
 
-        var branches = [that]; var children = []; var inserted = false;
-        while (!inserted) {
-            children = getChildren(branches);
-
-            inserted = children.some(function (child) {
-                if (!child.getBranch()) {
-                    child.setBranch(new klass(key));
-                    return true;
-                }
-            });
-
-            if (!inserted) {
-                branches = [];
-                children.forEach(function (child) {
-                    var branch = child.getBranch();
-                    if (branches.indexOf(branch) < 0) {
-                        branches.push(branch);
-                    }
-                });
+        that.some(function (child) {
+            if (!child.getBranch()) {
+                child.setBranch(new klass(key));
+                return true;
             }
-        }
+        });
     };
 
     /**
@@ -85,29 +93,15 @@ var CompleteBinaryTree = function (value) {
     this.getTail = function (asContext) {
         asContext = typeof asContext !== 'undefined' ? asContext : false;
 
-        var branches = [that]; var children = []; var tail = that; var end = false;
-        while (!end) {
-            children = getChildren(branches);
-
-            end = children.some(function (child) {
-                var branch = child.getBranch();
-                if (!branch) {
-                    return true;
-                } else {
-                    tail = asContext ? child : branch;
-                }
-            });
-
-            if (!end) {
-                branches = [];
-                children.forEach(function (child) {
-                    var branch = child.getBranch();
-                    if (branches.indexOf(branch) < 0) {
-                        branches.push(branch);
-                    }
-                });
+        var tail = that;
+        that.some(function (child) {
+            var branch = child.getBranch();
+            if (!branch) {
+                return true;
+            } else {
+                tail = asContext ? child : branch;
             }
-        }
+        });
 
         return tail;
     };
