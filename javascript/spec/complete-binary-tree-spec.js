@@ -43,4 +43,27 @@ describe('complete-binary-tree', function () {
 
         expect(tree.right.left.value).toBe(6);
     });
+
+    it('should have a last element', function () {
+        var tree = new CompleteBinaryTree(0);
+        var tail = 10;
+        for (var i = 1; i < tail + 1; i++) {
+            tree.insert(i);
+        }
+
+        expect(tree.getTail().value).toBe(tail);
+    });
+
+    it('should remove the root element', function () {
+        var tree = new CompleteBinaryTree(0);
+        for (var i = 1; i < 10; i++) { tree.insert(i); }
+
+        var length = tree.flatten().length;
+
+        var root = tree.shift();
+        expect(root).toEqual(0);
+
+        expect(tree.depthFirstSearch(0)).toBe(null);
+        expect(tree.flatten().length).not.toBe(length);
+    });
 });
