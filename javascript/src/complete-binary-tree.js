@@ -2,7 +2,7 @@ var BinaryTree = require('./binary-tree');
 
 /**
  * Store a branch with context to it's parent. By providing getters and
- * setters, `NodeContext` allows both checking if a branch is present, and
+ * setters, `BranchContext` allows both checking if a branch is present, and
  * setting (inserting) a new branch, without reference being lost as `null`.
  */
 var BranchContext = function (parent, branch) {
@@ -53,14 +53,13 @@ var CompleteBinaryTree = function (value) {
         var branches = [that]; var children = []; var test = false;
         while (!test) {
             children = getChildren(branches);
-
             test = children.some(predicate);
 
             if (!test) {
                 branches = [];
                 children.forEach(function (child) {
                     var branch = child.getBranch();
-                    if (branches.indexOf(branch) < 0) {
+                    if (branch) {
                         branches.push(branch);
                     }
                 });
@@ -122,8 +121,8 @@ var CompleteBinaryTree = function (value) {
         var res = this.value;
 
         var tail = this.getTail(true);
-
         if (tail !== this) {
+            // tree contained more than one node
             this.value = tail.getBranch().value;
             tail.setBranch(null);
         } else {
