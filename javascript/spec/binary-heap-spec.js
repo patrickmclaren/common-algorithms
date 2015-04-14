@@ -17,4 +17,11 @@ describe('binary-heap', function () {
         expect(heap.value).toBe(4);
         expect(heap.left.value).toBe(3);
     });
+
+    it('should be able to insert an array', function () {
+        var heap = new BinaryHeap(1);
+        heap.put_array([2, 3, 4]);
+
+        expect(heap.flatten().length).toBe(4);
+    });
 });

@@ -27,10 +27,30 @@ var BinaryHeap = function (value) {
         }
     };
 
+    /**
+     * Insert element into the heap, preserving the heap property.
+     */
     var _insert = this.insert;
     this.insert = function (key) {
         _insert.call(that, key, BinaryHeap);
         that.heapify();
+    };
+
+    /**
+     * Insert elements of an array in to a binary heap.
+     */
+    this.put_array = function (arr) {
+        while (arr.length > 0) {
+            this.insert(arr.pop());
+        }
+    };
+
+    var _shift = this.shift;
+    this.shift = function () {
+        var res = _shift.call(that);
+        this.heapify();
+
+        return res;
     };
 };
 
