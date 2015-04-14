@@ -25,4 +25,16 @@ describe('binary-tree', function () {
         var tree = new BinaryTree(testValue);
         expect(tree.value).toBe(testValue);
     });
+
+    it('should search depth first', function () {
+        var tree = new BinaryTree(1);
+        tree.left = new BinaryTree(2);
+        tree.left.left = new BinaryTree(3);
+        tree.right = new BinaryTree(4);
+
+        expect(tree.depthFirstSearch(3)).toBe(
+            tree.left.left);
+
+        expect(tree.depthFirstSearch(5)).toBe(null);
+    });
 });

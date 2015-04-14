@@ -23,9 +23,9 @@ var BinaryNode = function (value) {
     this.depthFirstSearch = function (value) {
         function finder(val, tree) {
             if (tree === null) {
-                return;
+                return null;
             }
-            
+
             if (tree.value === val) {
                 return tree
             } else {
