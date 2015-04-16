@@ -5,6 +5,15 @@ describe('complete-binary-tree', function () {
         CompleteBinaryTree = require('../src/complete-binary-tree');
     });
 
+    function makeFilledTree(numChildren) {
+        numChildren = typeof numChildren !== 'undefined' ? numChildren : 10;
+
+        var tree = new CompleteBinaryTree(0);
+        for (var i = 1; i <= numChildren; i++) { tree.insert(i); }
+
+        return tree;
+    }
+
     it('should create a tree', function () {
         var tree = new CompleteBinaryTree();
         expect(tree).not.toBe(null);
@@ -24,7 +33,7 @@ describe('complete-binary-tree', function () {
         expect(tree.left.value).toBe(2);
     });
 
-    it('should be complete', function () {
+    it('should be insert elements, preserving complete property', function () {
         var tree = new CompleteBinaryTree(1);
 
         tree.insert(2);
@@ -34,6 +43,9 @@ describe('complete-binary-tree', function () {
         tree.insert(6);
 
         expect(tree.flatten().length).toBe(6);
+
+        // NOTE(patrick): Checking insertion inductively. Need to show that
+        // insertion is complete at the (n + 1)th level, i.e. root.child.child.
 
         expect(tree.left.value).toBe(2);
         expect(tree.right.value).toBe(3);
@@ -45,18 +57,13 @@ describe('complete-binary-tree', function () {
     });
 
     it('should have a last element', function () {
-        var tree = new CompleteBinaryTree(0);
-        var tail = 10;
-        for (var i = 1; i < tail + 1; i++) {
-            tree.insert(i);
-        }
+        var tree = makeFilledTree(10);
 
-        expect(tree.getTail().value).toBe(tail);
+        expect(tree.getTail().value).toBe(10);
     });
 
     it('should remove the root element', function () {
-        var tree = new CompleteBinaryTree(0);
-        for (var i = 1; i < 10; i++) { tree.insert(i); }
+        var tree = makeFilledTree();
 
         var length = tree.flatten().length;
 
@@ -68,8 +75,7 @@ describe('complete-binary-tree', function () {
     });
 
     it('should apply predicate to tree', function () {
-        var tree = new CompleteBinaryTree(0);
-        for (var i = 1; i < 10; i++) { tree.insert(i); }
+        var tree = makeFilledTree();
 
         var res = tree.some(function () {});
         expect(typeof res).toBe('undefined');
