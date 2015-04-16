@@ -63,6 +63,10 @@ var CompleteBinaryTree = function (value) {
                         branches.push(branch);
                     }
                 });
+
+                if (branches.length === 0) {
+                    break;
+                }
             }
         }
     }

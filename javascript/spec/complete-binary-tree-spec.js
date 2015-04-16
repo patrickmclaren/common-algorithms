@@ -66,4 +66,12 @@ describe('complete-binary-tree', function () {
         expect(tree.depthFirstSearch(0)).toBe(null);
         expect(tree.flatten().length).not.toBe(length);
     });
+
+    it('should apply predicate to tree', function () {
+        var tree = new CompleteBinaryTree(0);
+        for (var i = 1; i < 10; i++) { tree.insert(i); }
+
+        var res = tree.some(function () {});
+        expect(typeof res).toBe('undefined');
+    });
 });
